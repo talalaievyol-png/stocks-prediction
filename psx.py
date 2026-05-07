@@ -284,12 +284,12 @@ try:
     # =========================
     # TABS
     # =========================
-    tab1, tab2, tab3, tab4, tab5 = st.tabs([
+    tab1, tab2, tab3, tab4 = st.tabs([
         "Candlestick",
         "Technical Analysis",
         "AI Forecast",
         "Model Evaluation",
-        "Company Info"
+  
     ])
 
     # =========================================================
@@ -743,21 +743,6 @@ A direction accuracy of **{direction_accuracy:.1f}%** {"is better than random â€
 It cannot predict sudden moves driven by earnings, macro events, or sentiment shifts.  
 {"The forecast direction may have some value." if direction_accuracy > 55 else "Treat the forecast as a rough trend baseline only, not a directional signal."}
 """)
-
-    # =========================================================
-    # TAB 5 â€” COMPANY INFO
-    # =========================================================
-    with tab5:
-
-        st.subheader("Company Information")
-
-        st.write(f"**Sector:** {info.get('sector', 'N/A')}")
-        st.write(f"**Industry:** {info.get('industry', 'N/A')}")
-        st.write(f"**Country:** {info.get('country', 'N/A')}")
-        st.write(f"**Website:** {info.get('website', 'N/A')}")
-
-        st.subheader("Business Summary")
-        st.write(info.get('longBusinessSummary', 'N/A'))
 
 # =========================
 # ERROR HANDLING
