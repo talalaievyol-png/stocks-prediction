@@ -186,12 +186,23 @@ PSX_TICKERS = {
 
 }
 
-selected_label = st.sidebar.selectbox(
-    "Select PSX Stock",
-    list(PSX_TICKERS.keys())
+search_query = st.sidebar.text_input(
+    "🔍 Search Stock",
+    placeholder="Type to filter stocks..."
 )
 
-selected_value = PSX_TICKERS[selected_label]
+filtered_tickers = {k: v for k, v in PSX_TICKERS.items() 
+                   if search_query.lower() in k.lower()}
+
+if not filtered_tickers:
+    filtered_tickers = PSX_TICKERS
+
+selected_label = st.sidebar.selectbox(
+    "Select PSX Stock",
+    list(filtered_tickers.keys())
+)
+
+selected_value = filtered_tickers[selected_label]
 
 if selected_value == "__custom__":
     ticker = st.sidebar.text_input(
@@ -312,7 +323,7 @@ try:
             hovermode="x unified"
         )
 
-        st.plotly_chart(fig_candle, use_container_width=True)
+        st.plotly_chart(fig_candle, width='content')
         st.markdown("""
 ### What is a Candlestick Chart?
 
@@ -341,7 +352,7 @@ while red candles indicate price decreases.
             height=300
         )
 
-        st.plotly_chart(fig_volume, use_container_width=True)
+        st.plotly_chart(fig_volume, width='content')
 
     # =========================================================
     # TAB 2 — TECHNICAL ANALYSIS
@@ -376,7 +387,7 @@ the overall market trend.
 When MA50 crosses above MA200, it may indicate bullish momentum.
 When MA50 drops below MA200, it may indicate bearish momentum.
 """)
-        st.plotly_chart(fig_ma, use_container_width=True)
+        st.plotly_chart(fig_ma, width='content')
 
         # RSI
         delta = df['Close'].diff()
@@ -408,7 +419,7 @@ whether a stock may be overbought or oversold.
 - RSI below 30 → potentially oversold
 - RSI around 50 → neutral momentum
 """)
-        st.plotly_chart(fig_rsi, use_container_width=True)
+        st.plotly_chart(fig_rsi, width='content')
 
     # =========================================================
     # TAB 3 — AI FORECAST
@@ -445,7 +456,7 @@ See the **Model Evaluation** tab to understand how reliable this forecast is.
 
         fig_forecast = plot_plotly(model, forecast)
         fig_forecast.update_layout(template="plotly_dark", height=700)
-        st.plotly_chart(fig_forecast, use_container_width=True)
+        st.plotly_chart(fig_forecast, width='content')
 
         pred_price = float(forecast['yhat'].iloc[-1])
         diff = pred_price - current_price
@@ -686,7 +697,7 @@ We use a 95% CI width to give the model the best chance of capturing actual pric
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
         )
 
-        st.plotly_chart(fig_bt, use_container_width=True)
+        st.plotly_chart(fig_bt, width='content')
 
         # ── Section 5: Daily Error Chart ──────────────────────
         st.subheader("Daily Prediction Error")
@@ -714,7 +725,7 @@ We use a 95% CI width to give the model the best chance of capturing actual pric
             yaxis_title="Error %"
         )
 
-        st.plotly_chart(fig_err, use_container_width=True)
+        st.plotly_chart(fig_err, width='content')
 
         st.caption("🔴 Red bars = model overestimated  |  🟢 Green bars = model underestimated")
 
